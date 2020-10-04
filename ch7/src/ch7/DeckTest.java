@@ -1,0 +1,112 @@
+package ch7;
+
+public class DeckTest
+{
+	public static void main(String[] args)
+	{
+		// 카드 한 벌(Deck)을 만든다.
+		Deck d = new Deck();
+		
+		// 섞기 전에 제일 위의 카드를 뽑는다.
+		Card c = new Card();
+		
+		// System.out.println(c.toString());과 같다.
+		System.out.println(c);
+		
+		// 카드를 섞는다.
+		d.shuffle();
+		
+		// 섞은 후에 제일 위의 카드를 뽑는다.
+		c = d.Pick();
+		
+		System.out.println(c);
+	}
+}
+
+class Deck
+{
+	// 카드의 개수
+	final int CARD_NUM = 52;
+	
+	// Card 객체 배열을 포함
+	Card cardArr[] = new Card[CARD_NUM];
+	
+	// Deck의 카드를 초기화한다.
+	public Deck()
+	{
+		int i = 0;
+		
+		for (int k = Card.KIND_MAX; k > 0; k--)
+		{
+			for (int n = 0; n < Card.NUM_MAX; n++)
+			{
+				cardArr[i++] = new Card(k, n + 1);
+			}
+		}
+	}
+	
+	// 지정된 위치(index)에 있는 카드 하나를 꺼내서 반환
+	Card pick(int index)
+	{
+		return cardArr[index];
+	}
+	
+	// Deck에서 카드 하나를 선택한다.
+	Card Pick()
+	{
+		int index = (int) (Math.random() * CARD_NUM);
+		
+		return pick(index);
+	}
+	
+	// 카드의 순서를 섞는다.
+	void shuffle()
+	{
+		for (int i = 0; i < cardArr.length; i++)
+		{
+			int r = (int) (Math.random() * CARD_NUM);
+			
+			Card temp = cardArr[i];
+			cardArr[i] = cardArr[r];
+			cardArr[r] = temp;
+		}
+	}
+}
+
+class Card
+{
+	// 카드 무늬의 수
+	static final int KIND_MAX = 4;
+	
+	// 무늬별 카드 수
+	static final int NUM_MAX = 13;
+	
+	static final int SPADE = 4;
+	static final int DIAMOND = 3;
+	static final int HEART = 2;
+	static final int CLOVER = 1;
+	
+	int kind;
+	int number;
+	
+	public Card()
+	{
+		this(SPADE, 1);
+	}
+	
+	Card(int kind, int number)
+	{
+		this.kind = kind;
+		this.number = number;
+	}
+	
+	public String toString()
+	{
+		String[] kinds = { "", "CLOVER", "HEART", "DIAMOND", "SPADE" };
+		
+		// 숫자 10은 X로 표현
+		String numbers = "0123456789XJQK";
+		
+		return "kind : " + kinds[this.kind] + ", number : " + numbers.charAt(this.number);
+	}
+}
